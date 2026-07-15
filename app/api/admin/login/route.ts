@@ -1,20 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminToken, ADMIN_COOKIE_NAME } from "@/lib/auth";
 
+// ─────────────────────────────────────────────────────────────────────────
+// STATIC ADMIN CREDENTIALS
+// These are hardcoded here instead of coming from environment variables.
+// To change the owner's login email/password, edit the two lines below,
+// save this file, then commit + push (or re-upload) and redeploy.
+// Nobody can change these from the website itself — only by editing this
+// file directly in the code.
+// ─────────────────────────────────────────────────────────────────────────
+const ADMIN_EMAIL = "sugarland@admin.com";
+const ADMIN_PASSWORD = "ChangeThisPassword123!";
+// ─────────────────────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
 
-  const validEmail = process.env.ADMIN_EMAIL;
-  const validPassword = process.env.ADMIN_PASSWORD;
-
-  if (!validEmail || !validPassword) {
-    return NextResponse.json(
-      { error: "Admin credentials are not configured on the server." },
-      { status: 500 }
-    );
-  }
-
-  if (email !== validEmail || password !== validPassword) {
+  if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Incorrect email or password." }, { status: 401 });
   }
 

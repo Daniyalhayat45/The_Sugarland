@@ -18,6 +18,10 @@ type CartContextValue = {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+  toggleCart: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -26,6 +30,7 @@ const STORAGE_KEY = "sugarland_cart";
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -52,6 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...item, quantity }];
     });
+    setIsOpen(true);
   }
 
   function removeItem(productId: string) {
@@ -70,12 +76,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   }
 
+  function openCart() {
+    setIsOpen(true);
+  }
+
+  function closeCart() {
+    setIsOpen(false);
+  }
+
+  function toggleCart() {
+    setIsOpen((o) => !o);
+  }
+
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.quantity * i.price, 0);
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        totalItems,
+        totalPrice,
+        isOpen,
+        openCart,
+        closeCart,
+        toggleCart,
+      }}
     >
       {children}
     </CartContext.Provider>

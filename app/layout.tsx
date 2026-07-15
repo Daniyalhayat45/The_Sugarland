@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import CartDrawer from "@/components/CartDrawer";
 
 const yellowtail = Yellowtail({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
+          <CartDrawer />
         </CartProvider>
       </body>
     </html>

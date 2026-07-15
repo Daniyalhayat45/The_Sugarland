@@ -87,12 +87,24 @@ export default function AdminProductsPage() {
         <div className="mx-auto max-w-5xl">
           <div className="mb-6 flex items-center justify-between">
             <h1 className="font-display text-2xl font-bold text-ink">Products</h1>
-            <button
-              onClick={() => setShowForm((s) => !s)}
-              className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-cream hover:bg-plum"
-            >
-              {showForm ? "Cancel" : "+ Add Product"}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  if (!confirm("Load sample products and orders? This replaces any existing data.")) return;
+                  await fetch("/api/admin/seed", { method: "POST" });
+                  load();
+                }}
+                className="rounded-full border border-gold-deep px-5 py-2 text-sm font-semibold text-gold-deep hover:bg-gold/10"
+              >
+                Load Sample Data
+              </button>
+              <button
+                onClick={() => setShowForm((s) => !s)}
+                className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-cream hover:bg-plum"
+              >
+                {showForm ? "Cancel" : "+ Add Product"}
+              </button>
+            </div>
           </div>
 
           {showForm && (

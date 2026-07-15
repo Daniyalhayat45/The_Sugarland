@@ -48,19 +48,44 @@ npm run dev
 Visit http://localhost:3000 for the storefront and http://localhost:3000/admin/login for the
 owner dashboard.
 
-## 5. Deploy to Vercel (free)
+## Deploying with Vercel only (no local terminal needed)
 
-1. Push this project to a GitHub repo.
-2. Go to https://vercel.com, import the repo.
-3. Add the same environment variables from your `.env` file in the Vercel project settings
-   (Settings → Environment Variables).
-4. Deploy. Vercel will run `npm run build`, which runs `prisma generate` automatically first.
-5. After the first deploy, run the migration against your production database once from your
-   local machine (pointing `DATABASE_URL`/`DIRECT_URL` at the same Neon project):
-   ```bash
-   npx prisma migrate deploy
-   npm run seed   # optional, only if you want sample data in production too
-   ```
+This project is set up so the database tables get created **automatically during the Vercel
+build** — you don't need to run any Prisma commands on your own machine.
+
+1. **Get your code onto GitHub.** Create a new repo at github.com and upload these files (the
+   website's "uploading an existing file" option works, or use `git push` if you're comfortable
+   with git).
+2. **Set up Neon.** Go to neon.tech → create a project → open **Connection Details** → copy the
+   **pooled** connection string and the **direct** (non-pooled) one.
+3. **Import the repo into Vercel** (vercel.com → Add New Project).
+4. **Before deploying**, add these Environment Variables in the Vercel project settings:
+   - `DATABASE_URL` — the pooled Neon string
+   - `DIRECT_URL` — the direct Neon string
+   - `JWT_SECRET` — any long random string
+   - `ADMIN_EMAIL` — the email the bakery owner will log in with
+   - `ADMIN_PASSWORD` — the password the bakery owner will log in with
+5. **Deploy.** Vercel's build runs `prisma generate && prisma migrate deploy && next build` —
+   the `migrate deploy` step creates all your tables in Neon automatically using the migration
+   already included in `prisma/migrations/`.
+6. **Load sample data (optional).** Once deployed, log into `yoursite.vercel.app/admin/login`
+   with your `ADMIN_EMAIL`/`ADMIN_PASSWORD`, go to the **Products** tab, and click
+   **"Load Sample Data"** — this adds 10 sample products and 2 sample orders so the site isn't
+   empty. Safe to click once; skip it if you'd rather add your own products from scratch via
+   "+ Add Product".
+
+That's it — no `npx prisma migrate dev`, no local `npm run seed` required for this path.
+
+### Running it locally instead (optional)
+
+If you do want to run it on your own machine too:
+
+```bash
+cp .env.example .env   # fill in the same 5 values as above
+npm install
+npx prisma migrate deploy   # applies the same migration locally
+npm run dev
+```
 
 ## How it's organized
 

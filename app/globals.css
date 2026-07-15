@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background-color: #C9A227;
+  color: #1B1512;
+}
+
+/* Quilted diamond texture echoing the logo's background, used on cream sections */
+.quilted-bg {
+  background-color: #FAF5EC;
+  background-image:
+    linear-gradient(135deg, rgba(201,162,39,0.07) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(201,162,39,0.07) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(201,162,39,0.07) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(201,162,39,0.07) 25%, transparent 25%);
+  background-position: 40px 0, 40px 0, 0 0, 0 0;
+  background-size: 80px 80px;
+  background-repeat: repeat;
+}
+
+.ink-bg {
+  background-color: #1B1512;
+  background-image: radial-gradient(circle at 20% 20%, rgba(201,162,39,0.08), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(201,162,39,0.06), transparent 40%);
+}
+
+/* Gold drip divider: an SVG mask creates the irregular drip silhouette */
+.drip-divider {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  overflow: hidden;
+}
+
+.drip-divider svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: top;
+}
+
+.drip-divider.animate svg path {
+  animation: dripGrow 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: top;
+}
+
+@keyframes dripGrow {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, #8A6A1E 0%, #F1D98B 30%, #C9A227 50%, #F1D98B 70%, #8A6A1E 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -12px rgba(27, 21, 18, 0.35);
+}

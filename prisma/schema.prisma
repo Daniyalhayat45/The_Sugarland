@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ProductCategory {
+  PREMADE
+  CUPCAKE
+  PASTRY
+  SPECIALTY
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  BAKING
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
+enum OrderType {
+  PREMADE
+  CUSTOM
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  category    ProductCategory @default(PREMADE)
+  servings    String? // e.g. "8-10 people"
+  isAvailable Boolean         @default(true)
+  stockQty    Int             @default(10)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  trackingCode   String        @unique
+  type           OrderType
+  status         OrderStatus   @default(PENDING)
+  paymentStatus  PaymentStatus @default(UNPAID)
+  customerName   String
+  phone          String
+  deliveryAddress String
+  deliveryDate   DateTime
+  notes          String?
+  totalEstimate  Float
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  items       OrderItem[]
+  customCake  CustomCakeRequest?
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model CustomCakeRequest {
+  id                String   @id @default(cuid())
+  orderId           String   @unique
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  flavor            String
+  size              String
+  tierCount         Int      @default(1)
+  designNotes       String
+  referenceImageUrl String?
+  budgetRange       String
+  createdAt         DateTime @default(now())
+}

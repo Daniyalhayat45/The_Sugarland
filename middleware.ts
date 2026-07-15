@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get(ADMIN_COOKIE_NAME)?.value;
   const authed = await isValidSession(token);
 
-  const isApi = pathname.startsWith("/api/admin");
+  const isApi = pathname.startsWith("/api/admin") && pathname !== "/api/admin/login";
   const isAdminPage = pathname.startsWith("/admin") && pathname !== "/admin/login";
 
   if (isApi && !authed) {

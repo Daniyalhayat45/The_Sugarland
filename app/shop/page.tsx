@@ -25,25 +25,36 @@ export default async function ShopPage({
 
   return (
     <>
-      <section className="ink-bg px-5 py-14 text-center">
-        <p className="font-body text-xs uppercase tracking-[0.35em] text-gold/70">The Menu</p>
-        <h1 className="mt-3 font-display text-4xl font-bold text-cream">Shop Our Bakes</h1>
+      <section className="ink-bg relative overflow-hidden px-5 py-20 text-center">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
+          <div className="absolute -right-20 bottom-0 h-64 w-64 rounded-full bg-plum/25 blur-3xl" />
+        </div>
+        <div className="relative">
+          <span className="eyebrow"><span>The Menu</span></span>
+          <h1 className="mt-5 font-display text-5xl font-bold text-cream md:text-6xl">
+            Shop our <span className="font-script text-shimmer">bakes</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-cream/70">
+            Browse cakes, cupcakes, and pastries. Everything is baked to order the morning of delivery.
+          </p>
+        </div>
       </section>
       <DripDivider fill="#1B1512" />
 
-      <section className="quilted-bg px-5 py-14">
+      <section className="quilted-bg px-5 py-16">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex flex-wrap gap-2">
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
             {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
               const isActive = (category ?? "ALL") === key;
               return (
                 <a
                   key={key}
                   href={key === "ALL" ? "/shop" : `/shop?category=${key}`}
-                  className={`rounded-full border px-4 py-1.5 text-sm transition ${
+                  className={`rounded-full border px-5 py-2 font-body text-[11px] uppercase tracking-[0.28em] transition ${
                     isActive
-                      ? "border-ink bg-ink text-cream"
-                      : "border-ink/20 text-ink/70 hover:border-ink/50"
+                      ? "border-ink bg-ink text-cream shadow-[0_8px_20px_-8px_rgba(27,21,18,0.5)]"
+                      : "border-ink/20 bg-white/60 text-ink/70 hover:border-plum hover:text-plum"
                   }`}
                 >
                   {label}
@@ -57,7 +68,7 @@ export default async function ShopPage({
               Nothing here yet — check back soon or try a different category.
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
